@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 from alumnado import Alumnado
+from alumno import Alumno
 from repositorioAlumnos import RepositorioAlumnado
 import tkinter
 from tkinter import ttk
@@ -32,11 +33,11 @@ class Gui():
                            command = self.buscar_alumnos).grid(row=1, column=2)
         self.treeview = ttk.Treeview(self.ventana_principal)
         self.treeview = ttk.Treeview(self.ventana_principal, 
-                                     columns=("texto", "etiquetas"))
+                                     columns=("nivel", "grado"))
         self.treeview.heading("#0", text="id")
         self.treeview.column("#0", minwidth=0, width="40")
-        self.treeview.heading("texto", text="Texto")
-        self.treeview.heading("etiquetas", text="Etiquetas")
+        self.treeview.heading("nivel", text="Nivel")
+        self.treeview.heading("grado", text="Grado")
         self.treeview.grid(row=10, columnspan=3)
         self.poblar_tabla()
         botonSalir = tkinter.Button(self.ventana_principal, text = "Salir",
@@ -52,8 +53,8 @@ class Gui():
             alumnos = self.alumnado.alumnos
         #Poblamos el treeview:
         for alumno in alumnos:
-            item = self.treeview.insert("", tkinter.END, text=nota.id,
-                              values=(nota.texto, nota.etiquetas), iid=nota.id)
+            item = self.treeview.insert("", tkinter.END, text=alumno.buscar_por_nombre_apellido,
+                              values=(alumno.nivel, alumno.grado), iid=alumno.buscar_por_nombre_apellido)
         
     def agregar_alumno(self):
         self.modalAgregar = tkinter.Toplevel(self.ventana_principal)
@@ -72,9 +73,6 @@ class Gui():
         tkinter.Label(self.modalAgregar, text = "Grado: ").grid(row=1)
         self.nivel = tkinter.Entry(self.modalAgregar)
         self.nivel.grid(row=1, column=1, columnspan=2)
-        tkinter.Label(self.modalAgregar, text = "Asistencia: ").grid(row=1)
-        self.asistancia = tkinter.Entry(self.modalAgregar)
-        self.asistancia.grid(row=1, column=1, columnspan=2)
         botonOK = tkinter.Button(self.modalAgregar, text="Guardar",
                 command=self.agregar_ok)
         self.modalAgregar.bind("<Return>", self.agregar_ok)
@@ -84,10 +82,10 @@ class Gui():
         botonCancelar.grid(row=2,column=2)
 
     def agregar_ok(self, event=None):
-        alumno = self.alumnado.nuevo_alumno(self.texto.get(), self.etiquetas.get())
+        alumno = self.alumnado.nuevo_alumno(self.nivel.get(), self.grado.get())
         self.modalAgregar.destroy()
-        item = self.treeview.insert("", tkinter.END, text=nota.id,
-                                        values=(nota.texto, nota.etiquetas))
+        item = self.treeview.insert("", tkinter.END, text=alumno.buscar_por_nombre_apellido,
+                                        values=(alumno.nivel, alumno.grado))
         #print(self.treeview.set(item))
 
     def modificar_alumno(self):
@@ -103,30 +101,26 @@ class Gui():
         #Para probar:
         print(id)
 
-        alumno = self.alumnado._buscar_por_id(id)
+        alumno = self.alumnado.buscar_por_nombre_apellido(id)
         self.modalModificar = tkinter.Toplevel(self.ventana_principal)
         self.modalModificar.grab_set()
         tkinter.Label(self.modalModificar, text = "Nombre: ").pack()
-        self.texto = tkinter.Entry(self.modalModificar)
-        self.texto.insert(0,alumno.texto)
-        self.texto.pack()
-        self.texto.focus()
+        self.nombre = tkinter.Entry(self.modalModificar)
+        self.nombre.insert(0,alumno.nombre)
+        self.nombre.pack()
+        self.nombre.focus()
         tkinter.Label(self.modalModificar, text = "Apellido: ").pack()
-        self.etiquetas = tkinter.Entry(self.modalModificar)
-        self.etiquetas.insert(0,nota.etiquetas)
-        self.etiquetas.pack()
+        self.apellido = tkinter.Entry(self.modalModificar)
+        self.apellido.insert(0,alumno.apellido)
+        self.apellido.pack()
         tkinter.Label(self.modalModificar, text = "Nivel: ").pack()
-        self.etiquetas = tkinter.Entry(self.modalModificar)
-        self.etiquetas.insert(0,nota.etiquetas)
-        self.etiquetas.pack()
+        self.nivel = tkinter.Entry(self.modalModificar)
+        self.nivel.insert(0,alumno.nivel)
+        self.nivel.pack()
         tkinter.Label(self.modalModificar, text = "Grado: ").pack()
-        self.etiquetas = tkinter.Entry(self.modalModificar)
-        self.etiquetas.insert(0,nota.etiquetas)
-        self.etiquetas.pack()
-        tkinter.Label(self.modalModificar, text = "Asistencia: ").pack()
-        self.etiquetas = tkinter.Entry(self.modalModificar)
-        self.etiquetas.insert(0,nota.etiquetas)
-        self.etiquetas.pack()
+        self.grado = tkinter.Entry(self.modalModificar)
+        self.grado.insert(0,alumno.grado)
+        self.grado.pack()
         botonOK = tkinter.Button(self.modalModificar, text="Guardar",
                 command=self.modificar_ok)
         self.modalModificar.bind("<Return>", self.modificar_ok)
@@ -141,40 +135,40 @@ class Gui():
         print("Modificada la nota ",id)
         #id = int(self.treeview.selection()[0][1:])
         #idtree = self.treeview.selection()[0]
-        self.anotador.modificar_nota(id, self.texto.get())
-        self.anotador.modificar_etiquetas(id, self.etiquetas.get())
-        self.treeview.set(self.treeview.selection()[0], column="texto",
-                          value = self.texto.get())
-        self.treeview.set(self.treeview.selection()[0], column="etiquetas",
-                          value = self.etiquetas.get())
+        self.alumnado.modificar_nivel(id, self.nivel.get())
+        self.alumnado.modificar_grado(id, self.grado.get())
+        self.treeview.set(self.treeview.selection()[0], column="Nivel",
+                          value = self.nivel.get())
+        self.treeview.set(self.treeview.selection()[0], column="Grado",
+                          value = self.grado.get())
         self.modalModificar.destroy()
    
-    def eliminar_nota(self):
+    def eliminar_alumno(self):
         if not self.treeview.selection():
             messagebox.showwarning("Sin selección",
-                    "Seleccione primero la nota a eliminar")
+                    "Seleccione el alumno a eliminar")
             return False
         else:
             resp = messagebox.askokcancel("Confirmar",
-                    "¿Está seguro de eliminar la nota?")
+                    "¿Está seguro de querer eliminar al alumno del sistema?")
             if resp:
                 id = int(self.treeview.selection()[0][1:])
                 self.treeview.delete(self.treeview.selection()[0])
-                self.anotador.eliminar_nota(id)
+                self.alumnado.eliminar_alumno(id)
             else:
                 return False
 
-    def buscar_notas(self):
+    def buscar_alumno(self):
         filtro = self.cajaBuscar.get()
-        notas = self.anotador.buscar(filtro)
-        if notas:
-            self.poblar_tabla(notas)
+        alumno = self.alumnado.buscar(filtro)
+        if alumno:
+            self.poblar_tabla(alumno)
         else:
             messagebox.showwarning("Sin resultados",
-                                "Ninguna nota coincide con la búsqueda")
+                                "Ningun alumno coincide con la búsqueda")
     
     def salir(self):
-        self.repositorio.guardar_todo(self.anotador.notas)
+        self.repositorio.guardar_todo(self.alumnado.alumnos)
         self.ventana_principal.destroy()
 
 if __name__ == "__main__":
