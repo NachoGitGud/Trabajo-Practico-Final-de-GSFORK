@@ -3,12 +3,12 @@ from alumno import Alumno
 class Alumnado:
     #Inicializa el anotador con una lista de alumnos
     def __init__(self, lista_alumnos = []):
-        self.alumnos = lista_alumnos
+        self.lista_alumnos = lista_alumnos
 
     #Metodo para agregar un nuevo alumno
     def nuevo_alumno(self, nombre, apellido, nivel, grado, asistencia):
         alumno = Alumno(nombre, apellido, nivel, grado, asistencia)
-        self.alumnos.append(alumno)
+        self.lista_alumnos.append(alumno)
         return alumno
 
    #Busca el alumno con el nivel dado
@@ -32,13 +32,6 @@ class Alumnado:
             if un_alumno.coincide(nombre_apellido_buscar):
                 a.append(un_alumno)
         return a
-
-    #Busca el alumno con la asistencia dada
-    def buscar_por_asistencia (self, asistencia):
-        for un_alumno in self.lista_alumnos:
-            if un_alumno.calcular_asistencia == asistencia:
-                return un_alumno
-        return None
 
     #Metodo para modificar el nivel de un alumno buscando por nombre y apellido
     def modificar_alumno(self, nombre_apellido_buscar, nivel):
@@ -66,12 +59,15 @@ class Alumnado:
 
     #Metodo que busca los alumnos que coincidan con el filtro dado
     def buscar(self, filtro):
-        return [ alumno for alumno in self.alumnos if alumno.coincide_filtro(filtro) ]
+        return [ alumno for alumno in self.lista_alumnos if alumno.coincide_filtro(filtro) ]
 
     #Metodo para eliminar un alumno buscando por nombre y apellido
-    def eliminar_alumno(self, nombre_apellido_buscar):
-        alumno = self.buscar_por_nombre_apellido(nombre_apellido_buscar)
+    def eliminar_alumno(self, id_alumno):
+        alumno = None
+        for a in self.lista_alumnos:
+            if a.id == id_alumno:
+                alumno = a                      
         if alumno:
-            self.alumnos.remove(alumno)
+            self.lista_alumnos.remove(alumno)
             return True
         return False

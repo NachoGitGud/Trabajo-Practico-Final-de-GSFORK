@@ -30,12 +30,14 @@ class Gui():
         self.cajaBuscar = tkinter.Entry(self.ventana_principal)
         self.cajaBuscar.grid(row=1, column=1)
         botonBuscar = tkinter.Button(self.ventana_principal, text = "Buscar",
-                           command = self.buscar_alumnos).grid(row=1, column=2)
+                           command = self.buscar_alumno).grid(row=1, column=2)
         self.treeview = ttk.Treeview(self.ventana_principal)
         self.treeview = ttk.Treeview(self.ventana_principal, 
-                                     columns=("nivel", "grado"))
+                                     columns=("nombre", "apellido", "nivel", "grado"))
         self.treeview.heading("#0", text="id")
         self.treeview.column("#0", minwidth=0, width="40")
+        self.treeview.heading("nombre", text="Nombre")
+        self.treeview.heading("apellido", text="Apellido")
         self.treeview.heading("nivel", text="Nivel")
         self.treeview.heading("grado", text="Grado")
         self.treeview.grid(row=10, columnspan=3)
@@ -50,11 +52,13 @@ class Gui():
             self.treeview.delete(i)
         #Si no recibimos la lista de notas, le asignamos todas las notas:
         if not alumnos:
-            alumnos = self.alumnado.alumnos
+            alumnos = self.alumnado.lista_alumnos
         #Poblamos el treeview:
         for alumno in alumnos:
-            item = self.treeview.insert("", tkinter.END, text=alumno.buscar_por_nombre_apellido,
-                              values=(alumno.nivel, alumno.grado), iid=alumno.buscar_por_nombre_apellido)
+            item = self.treeview.insert("", tkinter.END, text=alumno.id,
+                              values=(alumno.nombre, alumno.apellido, alumno.nivel, alumno.grado), iid=alumno.id)
+            #item = self.treeview.insert("", tkinter.END, text=alumno.buscar_por_nombre_apellido,
+            #                  values=(alumno.nivel, alumno.grado), iid=alumno.buscar_por_nombre_apellido)
         
     def agregar_alumno(self):
         self.modalAgregar = tkinter.Toplevel(self.ventana_principal)
@@ -152,7 +156,7 @@ class Gui():
             resp = messagebox.askokcancel("Confirmar",
                     "¿Está seguro de querer eliminar al alumno del sistema?")
             if resp:
-                id = int(self.treeview.selection()[0][1:])
+                id = int(self.treeview.selection()[0])
                 self.treeview.delete(self.treeview.selection()[0])
                 self.alumnado.eliminar_alumno(id)
             else:
@@ -168,7 +172,7 @@ class Gui():
                                 "Ningun alumno coincide con la búsqueda")
     
     def salir(self):
-        self.repositorio.guardar_todo(self.alumnado.alumnos)
+        self.repositorio.guardar_todo(self.alumnado.lista_alumnos)
         self.ventana_principal.destroy()
 
 if __name__ == "__main__":
