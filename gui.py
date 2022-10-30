@@ -71,25 +71,25 @@ class Gui():
         tkinter.Label(self.modalAgregar, text = "Apellido: ").grid(row=1)
         self.apellido = tkinter.Entry(self.modalAgregar)
         self.apellido.grid(row=1, column=1, columnspan=2)
-        tkinter.Label(self.modalAgregar, text = "Nivel: ").grid(row=1)
-        self.grado = tkinter.Entry(self.modalAgregar)
-        self.grado.grid(row=1, column=1, columnspan=2)
-        tkinter.Label(self.modalAgregar, text = "Grado: ").grid(row=1)
+        tkinter.Label(self.modalAgregar, text = "Nivel: ").grid(row=2)
         self.nivel = tkinter.Entry(self.modalAgregar)
-        self.nivel.grid(row=1, column=1, columnspan=2)
+        self.nivel.grid(row=2, column=1, columnspan=2)
+        tkinter.Label(self.modalAgregar, text = "Grado: ").grid(row=3)
+        self.grado = tkinter.Entry(self.modalAgregar)
+        self.grado.grid(row=3, column=1, columnspan=2)
         botonOK = tkinter.Button(self.modalAgregar, text="Guardar",
                 command=self.agregar_ok)
         self.modalAgregar.bind("<Return>", self.agregar_ok)
-        botonOK.grid(row=2)
+        botonOK.grid(row=4)
         botonCancelar = tkinter.Button(self.modalAgregar, text = "Cancelar",
                 command = self.modalAgregar.destroy)
-        botonCancelar.grid(row=2,column=2)
+        botonCancelar.grid(row=4,column=2)
 
     def agregar_ok(self, event=None):
-        alumno = self.alumnado.nuevo_alumno(self.nivel.get(), self.grado.get())
+        alumno = self.alumnado.nuevo_alumno(self.nombre.get(), self.apellido.get(), self.nivel.get(), self.grado.get())
         self.modalAgregar.destroy()
-        item = self.treeview.insert("", tkinter.END, text=alumno.buscar_por_nombre_apellido,
-                                        values=(alumno.nivel, alumno.grado))
+        item = self.treeview.insert("", tkinter.END, text=alumno,
+                                        values=(alumno.nombre, alumno.apellido, alumno.nivel, alumno.grado))
         #print(self.treeview.set(item))
 
     def modificar_alumno(self):

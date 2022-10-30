@@ -6,24 +6,10 @@ class Alumnado:
         self.lista_alumnos = lista_alumnos
 
     #Metodo para agregar un nuevo alumno
-    def nuevo_alumno(self, nombre, apellido, nivel, grado, asistencia):
-        alumno = Alumno(nombre, apellido, nivel, grado, asistencia)
+    def nuevo_alumno(self, nombre, apellido, nivel, grado):
+        alumno = Alumno(nombre, apellido, nivel, grado)
         self.lista_alumnos.append(alumno)
         return alumno
-
-   #Busca el alumno con el nivel dado
-    def buscar_por_nivel(self, buscar_nivel):
-        for un_alumno in self.lista_alumnos:
-           if un_alumno.nivel == buscar_nivel:
-            return un_alumno
-        return None   
-
-    #Busca el alumno con el grado dado
-    def buscar_por_grado(self, buscar_grado):
-        for un_alumno in self.lista_alumnos:
-            if un_alumno.grado == buscar_grado:
-                return un_alumno
-        return None
     
     #Busca el alumno con el nombre y apellido dado
     def buscar_por_nombre_apellido(self, nombre_apellido_buscar):
@@ -32,6 +18,22 @@ class Alumnado:
             if un_alumno.coincide(nombre_apellido_buscar):
                 a.append(un_alumno)
         return a
+    
+   #Busca el alumno con el nivel dado
+    def buscar_por_nivel(self, buscar_nivel):
+        b = []
+        for un_alumno in self.lista_alumnos:
+           if un_alumno.nivel == buscar_nivel:
+            return un_alumno
+        return b
+
+    #Busca el alumno con el grado dado
+    def buscar_por_grado(self, buscar_grado):
+        c = []
+        for un_alumno in self.lista_alumnos:
+            if un_alumno.grado == buscar_grado:
+                return un_alumno
+        return c
 
     #Metodo para modificar el nivel de un alumno buscando por nombre y apellido
     def modificar_alumno(self, nombre_apellido_buscar, nivel):

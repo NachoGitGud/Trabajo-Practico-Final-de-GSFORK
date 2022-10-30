@@ -1,2 +1,3 @@
 Pepe,Lopez,Secundario,4
-Ana,Diaz,Primario,6
+Ana,Diaz,Primario, 2
+John,Salchichon,Primario,6
