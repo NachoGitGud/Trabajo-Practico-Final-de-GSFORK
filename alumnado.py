@@ -35,29 +35,21 @@ class Alumnado:
                 return un_alumno
         return c
 
-    #Metodo para modificar el nivel de un alumno buscando por nombre y apellido
-    def modificar_alumno(self, nombre_apellido_buscar, nivel):
-        alumno = self.buscar_por_nombre_apellido(nombre_apellido_buscar)
+    #Metodo para modificar el grado de un alumno buscando por nombre y apellido
+    def modificar_nivel(self, nivel):
+        alumno = self.modificar_nivel(nivel)
         if alumno:
             alumno.nivel = nivel
             return True
-        return False
-
+        return False   
+    
     #Metodo para modificar el grado de un alumno buscando por nombre y apellido
-    def modificar_grado(self, nombre_apellido_buscar, grado):
-        alumno = self.buscar_por_nombre_apellido(nombre_apellido_buscar)
+    def modificar_grado(self, grado):
+        alumno = self.modificar_grado(grado)
         if alumno:
             alumno.grado = grado
             return True
-        return False
-
-    #Metodo para modificar el grado de un alumno buscando por nombre y apellido
-    def modificar_nivel(self, nombre_apellido_buscar, nivel):
-        alumno = self.buscar_por_nombre_apellido(nombre_apellido_buscar)
-        if alumno:
-            alumno.nivel = nivel
-            return True
-        return False    
+        return False 
 
     #Metodo que busca los alumnos que coincidan con el filtro dado
     def buscar(self, filtro):

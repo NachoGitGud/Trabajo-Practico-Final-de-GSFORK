@@ -102,28 +102,15 @@ class Gui():
         id = self.treeview.item(item)['text']
         #id = self.treeview.item(item, option="text")
 
-        #Para probar:
-        print(id)
-
-        alumno = self.alumnado.buscar_por_nombre_apellido(id)
         self.modalModificar = tkinter.Toplevel(self.ventana_principal)
         self.modalModificar.grab_set()
-        tkinter.Label(self.modalModificar, text = "Nombre: ").pack()
-        self.nombre = tkinter.Entry(self.modalModificar)
-        self.nombre.insert(0,alumno.nombre)
-        self.nombre.pack()
-        self.nombre.focus()
-        tkinter.Label(self.modalModificar, text = "Apellido: ").pack()
-        self.apellido = tkinter.Entry(self.modalModificar)
-        self.apellido.insert(0,alumno.apellido)
-        self.apellido.pack()
         tkinter.Label(self.modalModificar, text = "Nivel: ").pack()
         self.nivel = tkinter.Entry(self.modalModificar)
-        self.nivel.insert(0,alumno.nivel)
+        self.nivel.insert(0,self.nivel)
         self.nivel.pack()
         tkinter.Label(self.modalModificar, text = "Grado: ").pack()
         self.grado = tkinter.Entry(self.modalModificar)
-        self.grado.insert(0,alumno.grado)
+        self.grado.insert(0,self.grado)
         self.grado.pack()
         botonOK = tkinter.Button(self.modalModificar, text="Guardar",
                 command=self.modificar_ok)
@@ -136,15 +123,13 @@ class Gui():
     def modificar_ok(self, event=None):
         item = self.treeview.selection()        
         id = self.treeview.item(item)['text']
-        print("Modificada la nota ",id)
+        print("Modificada la nota ")
         #id = int(self.treeview.selection()[0][1:])
         #idtree = self.treeview.selection()[0]
-        self.alumnado.modificar_nivel(id, self.nivel.get())
-        self.alumnado.modificar_grado(id, self.grado.get())
-        self.treeview.set(self.treeview.selection()[0], column="Nivel",
-                          value = self.nivel.get())
-        self.treeview.set(self.treeview.selection()[0], column="Grado",
-                          value = self.grado.get())
+        self.alumnado.modificar_nivel(id,self.nivel.get())
+        self.alumnado.modificar_grado(id,self.grado.get())
+        self.treeview.set(self.treeview.selection()[0], column="Nivel")
+        self.treeview.set(self.treeview.selection()[0], column="Grado")
         self.modalModificar.destroy()
    
     def eliminar_alumno(self):
