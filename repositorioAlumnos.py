@@ -1,5 +1,3 @@
-#! /usr/bin/python3
-
 from alumnado import Alumnado
 from alumno import Alumno
 import datetime
@@ -28,8 +26,8 @@ class RepositorioAlumnado:
         este:
         Ana,Diaz,Primario,6
         '''        
-        g = str(alumno.grado)
-        return alumno.nombre + ',' + alumno.apellido + ',' + alumno.nivel + ',' + g + '\n'
+    
+        return alumno.nombre + ',' + alumno.apellido + ',' +str(alumno.nivel) + ',' + str(alumno.grado) + '\n'
         
 
     def texto_a_alumno(self, texto):

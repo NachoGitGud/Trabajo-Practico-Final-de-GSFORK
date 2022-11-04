@@ -88,7 +88,7 @@ class Gui():
     def agregar_ok(self, event=None):
         alumno = self.alumnado.nuevo_alumno(self.nombre.get(), self.apellido.get(), self.nivel.get(), self.grado.get())
         self.modalAgregar.destroy()
-        item = self.treeview.insert("", tkinter.END, text=alumno,
+        item = self.treeview.insert("", tkinter.END, text=alumno.id,
                                         values=(alumno.nombre, alumno.apellido, alumno.nivel, alumno.grado))
         #print(self.treeview.set(item))
 
@@ -97,40 +97,38 @@ class Gui():
             messagebox.showwarning("Sin selección",
                     "Seleccione primero el alumno a modificar")
             return False
-        #id = int(self.treeview.selection()[0][1:])
+        
         item = self.treeview.selection()        
-        id = self.treeview.item(item)['text']
-        #id = self.treeview.item(item, option="text")
-
+        id_alumno = int(self.treeview.item(item)['text'])
+        alumno = self.alumnado._buscar_por_id(id_alumno)
         self.modalModificar = tkinter.Toplevel(self.ventana_principal)
         self.modalModificar.grab_set()
         tkinter.Label(self.modalModificar, text = "Nivel: ").pack()
         self.nivel = tkinter.Entry(self.modalModificar)
-        self.nivel.insert(0,self.nivel)
+        self.nivel.insert(0, alumno.nivel)
         self.nivel.pack()
         tkinter.Label(self.modalModificar, text = "Grado: ").pack()
         self.grado = tkinter.Entry(self.modalModificar)
-        self.grado.insert(0,self.grado)
+        self.grado.insert(0, alumno.grado)
         self.grado.pack()
-        botonOK = tkinter.Button(self.modalModificar, text="Guardar",
-                command=self.modificar_ok)
+        botonOK = tkinter.Button(self.modalModificar, text="Guardar", command=self.modificar_ok)
         self.modalModificar.bind("<Return>", self.modificar_ok)
         botonOK.pack()
-        botonCancelar = tkinter.Button(self.modalModificar, text = "Cancelar",
-                                       command = self.modalModificar.destroy)
+        botonCancelar = tkinter.Button(self.modalModificar, text = "Cancelar", command = self.modalModificar.destroy)
         botonCancelar.pack()
 
-    def modificar_ok(self, event=None):
+    def modificar_ok(self, event = None):
         item = self.treeview.selection()        
-        id = self.treeview.item(item)['text']
-        print("Modificada la nota ")
-        #id = int(self.treeview.selection()[0][1:])
-        #idtree = self.treeview.selection()[0]
-        self.alumnado.modificar_nivel(id,self.nivel.get())
-        self.alumnado.modificar_grado(id,self.grado.get())
-        self.treeview.set(self.treeview.selection()[0], column="Nivel")
-        self.treeview.set(self.treeview.selection()[0], column="Grado")
-        self.modalModificar.destroy()
+        id_alumno = int(self.treeview.item(item)['text'])
+        resultado = self.alumnado.modificar(self.nivel.get(), self.grado.get(),id_alumno)
+        if resultado:
+            self.treeview.set(self.treeview.selection()[0], column="nivel", value=self.nivel.get())
+            self.treeview.set(self.treeview.selection()[0], column="grado", value=self.grado.get())
+            self.modalModificar.destroy()
+        else:
+            messagebox.showwarning("Error", "Error al modificar alumno")
+
+
    
     def eliminar_alumno(self):
         if not self.treeview.selection():
@@ -141,9 +139,9 @@ class Gui():
             resp = messagebox.askokcancel("Confirmar",
                     "¿Está seguro de querer eliminar al alumno del sistema?")
             if resp:
-                id = int(self.treeview.selection()[0])
+                id_alumno = int(self.treeview.selection()[0])
                 self.treeview.delete(self.treeview.selection()[0])
-                self.alumnado.eliminar_alumno(id)
+                self.alumnado.eliminar_alumno(id_alumno)
             else:
                 return False
 

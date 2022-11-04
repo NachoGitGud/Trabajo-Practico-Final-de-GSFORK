@@ -1,4 +1,0 @@
-Ana,Diaz,Primario, 2
-Oscar Raul,Villa,Secundario,7
-Pablo,Escobar,Primario,2
-Pepe,Mujica,Secundario,3

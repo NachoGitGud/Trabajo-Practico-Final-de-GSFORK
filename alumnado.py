@@ -1,3 +1,4 @@
+from ast import Return
 from alumno import Alumno
 
 class Alumnado:
@@ -10,7 +11,15 @@ class Alumnado:
         alumno = Alumno(nombre, apellido, nivel, grado)
         self.lista_alumnos.append(alumno)
         return alumno
-    
+
+    #Busca alumno por id
+    def _buscar_por_id(self,id_alumno):
+        for alumno in self.lista_alumnos:
+            if str(alumno.id) == str(id_alumno):
+                return alumno
+        return None
+
+
     #Busca el alumno con el nombre y apellido dado
     def buscar_por_nombre_apellido(self, nombre_apellido_buscar):
         a = []
@@ -35,21 +44,15 @@ class Alumnado:
                 return un_alumno
         return c
 
-    #Metodo para modificar el grado de un alumno buscando por nombre y apellido
-    def modificar_nivel(self, nivel):
-        alumno = self.modificar_nivel(nivel)
+    #Metodo para modificar el grado y nivel de un alumno buscando por id
+    def modificar(self, nivel, grado, id_alumno):
+        alumno = self._buscar_por_id(id_alumno)
         if alumno:
             alumno.nivel = nivel
-            return True
-        return False   
-    
-    #Metodo para modificar el grado de un alumno buscando por nombre y apellido
-    def modificar_grado(self, grado):
-        alumno = self.modificar_grado(grado)
-        if alumno:
             alumno.grado = grado
             return True
-        return False 
+        return False
+    
 
     #Metodo que busca los alumnos que coincidan con el filtro dado
     def buscar(self, filtro):
@@ -57,10 +60,7 @@ class Alumnado:
 
     #Metodo para eliminar un alumno buscando por nombre y apellido
     def eliminar_alumno(self, id_alumno):
-        alumno = None
-        for a in self.lista_alumnos:
-            if a.id == id_alumno:
-                alumno = a                      
+        alumno = self._buscar_por_id(id_alumno)
         if alumno:
             self.lista_alumnos.remove(alumno)
             return True

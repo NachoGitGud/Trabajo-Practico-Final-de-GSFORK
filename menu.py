@@ -64,9 +64,9 @@ Menú del anotador:
         nivel = input("Ingrese el nivel del alumno: ")
         grado = input("Ingrese el grado del alumno: ")
         if nivel:
-            self.alumnado.modificar_nivel(identificador, nivel)
+            self.alumnado.modificar(identificador, nivel)
         if grado:
-            self.alumnado.modificar_grado(identificador, grado)
+            self.alumnado.modificar(identificador, grado)
     
     def salir(self):
         print("Gracias por utilizar el sistema.")
